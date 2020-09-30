@@ -60,7 +60,7 @@ services:
       - /mnt/zfspool/nextcloud:/var/www/html/data:rw          # Change to your data directory
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - VIRTUAL_HOST=cloudk.ddns.net
+      - VIRTUAL_HOST=                                         # Append your domain
     restart: unless-stopped      
   
   onlyoffice:
