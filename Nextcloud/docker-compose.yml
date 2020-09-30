@@ -15,7 +15,7 @@ services:
     container_name: nextcloud-proxy
     networks:
       nextcloud_network:
-        - ipv4_address: 172.10.0.2
+        ipv4_address: 172.10.0.2
     ports:
       - 80:80
       - 443:443
@@ -34,7 +34,7 @@ services:
     container_name: nextcloud-mariadb
     networks:
       nextcloud_network:
-        - ipv4_address: 172.10.0.3
+        ipv4_address: 172.10.0.3
     volumes:
       - /services/nextcloud/db:/var/lib/mysql:rw
       - /etc/localtime:/etc/localtime:ro
@@ -50,7 +50,7 @@ services:
     container_name: nextcloud-app
     networks:
       nextcloud_network:
-         - ipv4_address: 172.10.0.4
+         ipv4_address: 172.10.0.4
     depends_on:
       - proxy
       - db
@@ -68,7 +68,7 @@ services:
     container_name: nextcloud-documentserver
     networks:
       nextcloud_network:
-        - ipv4_address: 172.10.0.5
+        ipv4_address: 172.10.0.5
     depends_on:
       - proxy
       - app
@@ -83,5 +83,5 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet 172.10.0.0/16
-        - gateway 172.10.0.1
+        - subnet: 172.10.0.0/16
+          gateway: 172.10.0.1
