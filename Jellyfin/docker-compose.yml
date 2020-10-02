@@ -1,0 +1,21 @@
+version: "3"
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    user: 1000:1000
+    network_mode: "host"
+    restart: "unless-stopped"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - /services/Jellyfin/config:/config
+      - jellyfin-cache:/cache
+      - /mnt/zfspool/nextcloud/jellyfin/files/Media:/media
+      
+volumes:
+  jellyfin-cache:
+    driver: local
