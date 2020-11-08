@@ -1,0 +1,71 @@
+version: '3'     
+services: 
+  app:   
+    image: openhab/openhabcloud-app:latest  
+    build:
+      context: ../..
+      args:
+        TZ: Africa/Johannesburg
+    volumes:
+      - ./config.json.template:/opt/openhabcloud/config.json.template 
+    networks:
+      openhabcloud_network:
+        ipv4_address: 172.10.1.5
+    depends_on:  
+      - mongodb 
+      - redis
+    restart: always
+    environment: 
+      - DOMAIN_NAME 
+      - EXPRESS_KEY
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:${DOMAIN_NAME}"
+      - "traefik.port=3000"
+      - "traefik.protocol=http"
+
+  mongodb:
+    image: mongo:4
+    networks:
+      openhabcloud_network:
+        ipv4_address: 172.10.1.4
+    volumes:
+      - mongo-data:/data/db
+    restart: always   
+    
+  redis:
+    image: bitnami/redis:latest 
+    networks:
+      openhabcloud_network:
+        ipv4_address: 172.10.1.3
+    environment:
+      - REDIS_PASSWORD=123_openHAB 
+    restart: always
+    
+  traefik: 
+    image: traefik:1.7 
+    networks:
+      openhabcloud_network:
+        ipv4_address: 172.10.1.2
+    ports:
+      - "443:443"
+      - "80:80" 
+      - "8080:8080"
+    volumes:
+      - ./traefik.toml:/etc/traefik/traefik.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock 
+      - traefik-data:/data  
+    command:
+      - "--acme.email=${EMAIL}"
+        
+volumes:
+  mongo-data:
+  traefik-data:
+  
+networks:
+  openhabcloud_network:  
+    driver: bridge  
+    ipam:
+      config:
+        - subnet: 172.10.1.0/16
+          gateway: 172.10.1.1
