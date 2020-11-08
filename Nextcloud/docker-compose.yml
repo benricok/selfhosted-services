@@ -80,6 +80,7 @@ services:
      restart: unless-stopped
      enviroment:
       - USE_UNAUTHORIZED_STORAGE: false
+      
 networks:
   nextcloud_network:
     driver: bridge
