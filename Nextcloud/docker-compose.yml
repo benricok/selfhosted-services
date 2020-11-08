@@ -77,6 +77,7 @@ services:
       - /services/nextcloud/DocumentServer/data:/var/www/onlyoffice/Data:rw
       - /services/nextcloud/DocumentServer/lib:/var/lib/onlyoffice:rw
       - /services/nextcloud/DocumentServer/db:/var/lib/postgresql:rw
+      - ./onlyoffice/documentserver/default.json:/etc/onlyoffice/documentserver/default.json:ro
      restart: unless-stopped
      enviroment:
       - USE_UNAUTHORIZED_STORAGE: false
