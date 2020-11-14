@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     networks:
       openhab_network:
-        ipv4_address: 172.10.5.2
+        ipv4_address: 172.16.5.2
     ports:
       - 3080:80
       - 3443:443
@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
     networks:
       openhab_network:
-        ipv4_address: 172.10.5.3
+        ipv4_address: 172.16.5.3
     ports:
       - 1883:1883
       
@@ -42,5 +42,5 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.10.5.0/16
-          gateway: 172.10.5.1
+        - subnet: 172.16.5.0/16
+          gateway: 172.16.5.1
