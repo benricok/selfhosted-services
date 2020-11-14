@@ -1,4 +1,4 @@
-version: '2.2'
+version: '3'
 
 services:
   openhab:
@@ -13,10 +13,9 @@ services:
       - 3443:443
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - /services/openhab/addons:/openhab/addons
-      - /services/openhab/config:/openhab/conf
-      - /services/openhab/userdata:/openhab/userdata
+      - /services/openhab/addons:/openhab/addons:rw
+      - /services/openhab/config:/openhab/conf:rw
+      - /services/openhab/userdata:/openhab/userdata:rw
     environment:
       OPENHAB_HTTP_PORT: "80"
       OPENHAB_HTTPS_PORT: "443"
@@ -36,7 +35,16 @@ services:
         ipv4_address: 172.16.5.3
     ports:
       - 1883:1883
-      
+    volumes:
+      - /services/mosquitto/config:/mosquitto/config:rw
+      - /services/mosquitto/data:/mosquitto/data:rw
+      - /services/mosquitto/logs:/mosquitto/logs:rw
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://<domain>:1883"]
+      interval: 30s
+      timeout: 10s
+      retries: 6
+
 networks:
   openhab_network:
     driver: bridge
