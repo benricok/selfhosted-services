@@ -2,15 +2,15 @@ version: "3"
 services:
   jellyfin:
     image: jellyfin/jellyfin
+    container_name: jellyfin-media-server
     user: 1000:1000
     network_mode: "host"
     restart: "unless-stopped"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 1m30s
+      test: ["CMD", "curl", "-f", "http://cloudk.ddns.net:8096"]
+      interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 40s
+      retries: 6
     volumes:
       - /services/Jellyfin/config:/config
       - jellyfin-cache:/cache
