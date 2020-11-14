@@ -19,8 +19,6 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 800:800
-      - 2433:2443
     volumes:
       - /services/nextcloud/proxy/certs:/root/ssl/nextcloud:ro
       - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf
@@ -31,7 +29,7 @@ services:
       test: ["CMD", "curl", "-fk", "https://<domain>:443"]
       interval: 30s
       timeout: 10s
-      retries: 6:w
+      retries: 6
 
   db:
     image: mariadb
@@ -73,10 +71,10 @@ services:
       nextcloud_network:
         ipv4_address: 172.10.0.5
     ports:
-      - '880:80'
-      - '8000:8000'
-      - '8080:8080'
-      - '8443:443'
+      - 880:80
+      - 8000:8000
+      - 8080:8080
+      - 8443:443
     healthcheck:
       test: ["CMD", "curl", "-fk", "https://<domain>:8443"]
       interval: 30s
