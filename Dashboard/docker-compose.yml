@@ -1,0 +1,30 @@
+version: '3'  
+     
+services:
+  app:
+    image: organizr/organizr  
+    container_name: organizr-dashboard
+    networks:
+      organizr_network:
+        ipv4_address: 172.12.0.2
+    ports:
+      - 280:80
+    volumes:
+      - /services/organizr/app:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "http://<domain>:280"]
+      interval: 30s
+      timeout: 10s
+      retries: 6
+      
+ networks:
+  organizr_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.12.0.0/16
+          gateway: 172.12.0.1
+        
