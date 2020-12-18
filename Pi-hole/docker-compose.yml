@@ -14,10 +14,13 @@ services:
       TZ: 'Africa/Johannesburg'
       # WEBPASSWORD:
     volumes:
-      - './etc-pihole/:/etc/pihole/'
-      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
-    # Recommended but not required (DHCP needs NET_ADMIN)
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+      - ./etc-pihole/:/etc/pihole
+      - ./etc-dnsmasq.d/:/etc/dnsmasq.d
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "http://192.168.1.192:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 6
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
