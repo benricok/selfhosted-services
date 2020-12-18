@@ -1,0 +1,27 @@
+version: "3"
+services:
+  jellyfin:
+    image:  jacobalberty/unifi:arm32v7
+    container_name: unifi-controller
+    network_mode: "host"
+    restart: "unless-stopped"
+    ports:
+      - 3478:3478/udp
+      - 8880:8880
+      - 8843:8843
+      - 8080:8080
+      - 6789:6789
+
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "https://192.168.1.192:8443"]
+      interval: 30s
+      timeout: 10s
+      retries: 6
+    volumes:
+      - /home/pi/unifi/unifi/:/unifi
+      - /home/pi/unifi/unifi/cert:/unifi/cert
+      - /home/pi/unifi/unifi/log:/unifi/log 
+      - /home/pi/unifi/unifi/data:/unifi/data
+      - 8b450dc4a61017abea46c57e8b278bc2dd66b9c73c1cded80944286636620dc9:/var/run/unifi
+      
+
