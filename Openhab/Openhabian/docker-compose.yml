@@ -19,7 +19,7 @@ services:
     environment:
       OPENHAB_HTTP_PORT: "80"
       OPENHAB_HTTPS_PORT: "443"
-      EXTRA_JAVA_OPTS: "-Duser.timezone=Africa/Johhanesburg"
+      EXTRA_JAVA_OPTS: "-Duser.timezone=Africa/Johannesburg"
     healthcheck:
       test: ["CMD", "curl", "-fk", "http://<domain>:3080"]
       interval: 30s

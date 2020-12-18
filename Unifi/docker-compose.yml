@@ -1,6 +1,6 @@
 version: "3"
 services:
-  jellyfin:
+  unifi:
     image:  jacobalberty/unifi:arm32v7
     container_name: unifi-controller
     network_mode: "host"
@@ -22,6 +22,9 @@ services:
       - /home/pi/unifi/unifi/cert:/unifi/cert
       - /home/pi/unifi/unifi/log:/unifi/log 
       - /home/pi/unifi/unifi/data:/unifi/data
-      - 8b450dc4a61017abea46c57e8b278bc2dd66b9c73c1cded80944286636620dc9:/var/run/unifi
+      - data:/var/run/unifi
       
-
+volumes:
+  data:
+    external:
+      name: 8b450dc4a61017abea46c57e8b278bc2dd66b9c73c1cded80944286636620dc9
