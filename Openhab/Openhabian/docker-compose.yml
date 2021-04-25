@@ -11,6 +11,8 @@ services:
     ports:
       - 3080:80
       - 3443:443
+      - 5007:5007
+      - 8101:8101
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /services/openhab/addons:/openhab/addons:rw
@@ -21,7 +23,7 @@ services:
       OPENHAB_HTTPS_PORT: "443"
       EXTRA_JAVA_OPTS: "-Duser.timezone=Africa/Johannesburg"
     healthcheck:
-      test: ["CMD", "curl", "-fk", "http://<domain>:3080"]
+      test: ["CMD", "curl", "-fk", "http://127.0.0.1:3080"]
       interval: 30s
       timeout: 10s  
       retries: 6
@@ -40,7 +42,7 @@ services:
       - /services/mosquitto/data:/mosquitto/data:rw
       - /services/mosquitto/logs:/mosquitto/logs:rw
     healthcheck:
-      test: ["CMD", "curl", "-fk", "http://<domain>:1883"]
+      test: ["CMD", "curl", "-fk", "http://127.0.0.1:1883"]
       interval: 30s
       timeout: 10s
       retries: 6

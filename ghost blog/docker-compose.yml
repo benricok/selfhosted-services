@@ -1,0 +1,23 @@
+version: '3.2'
+
+services:
+
+  ghost:
+    image: ghost:2-alpine
+    restart: unless-stopped
+    container_name: ghost-blog
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "https://blog.<domain>"] # Add domain
+      interval: 30s
+      timeout: 10s
+      retries: 6
+    ports:
+      - 2368:2368
+    volumes:
+      - /var/www/ghost/content/data:/var/lib/ghost/content/data
+      - /var/www/ghost/content/apps:/var/lib/ghost/content/apps
+      - /var/www/ghost/content/images:/var/lib/ghost/content/images
+      - /var/www/ghost/content/themes:/var/lib/ghost/content/themes
+    # Specify your Ghost blog URL and mail server settings
+    environment:
+      url: 'blog.<domain>' # Add domain

@@ -7,7 +7,7 @@ services:
     network_mode: "host"
     restart: "unless-stopped"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://cloudk.ddns.net:8096"]
+      test: ["CMD", "curl", "-f", "https://media.<domain>"] # Add domain
       interval: 30s
       timeout: 10s
       retries: 6

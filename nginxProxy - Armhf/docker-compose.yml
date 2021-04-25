@@ -1,0 +1,41 @@
+version: '3'
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginxproxy
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./config.json:/app/config/production.json
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "http://127.0.0.1:81"]
+      interval: 30s
+      timeout: 10s
+      retries: 6
+
+  db:
+    image: tobi312/rpi-mariadb:10.3
+    container_name: nginxproxy-DB
+    restart: unless-stopped
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      TZ: Africa/Johannesburg
+      MYSQL_ROOT_PASSWORD: '' # Add root password
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'nginx'
+      MYSQL_PASSWORD: '' # Add user password
+    ports:
+      - 3306:3306
+    healthcheck:
+      test:  mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 5
