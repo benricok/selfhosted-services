@@ -12,8 +12,6 @@ services:
   db:
     image: mariadb
     container_name: nextcloud-mariadb
-    ports:
-      - 801:80
     networks:
       nextcloud_network:
         ipv4_address: 172.10.0.3
@@ -35,6 +33,8 @@ services:
   app:
     image: nextcloud:latest
     container_name: nextcloud-app
+    ports:
+      - 701:80 #map nextcloud app to port 701 on host
     networks:
       nextcloud_network:
         ipv4_address: 172.10.0.4
@@ -70,13 +70,10 @@ services:
       timeout: 10s
       retries: 6
     volumes:
-      - /services/nextcloud/DocumentServer/logs:/var/log/onlyoffice:rw
-      - /services/nextcloud/DocumentServer/data:/var/www/onlyoffice/Data:rw
-      - /services/nextcloud/DocumentServer/lib:/var/lib/onlyoffice:rw
-      - /services/nextcloud/DocumentServer/db:/var/lib/postgresql:rw
+      - /services/nextcloud/DocumentServer/logs:/var/log/onlyoffice
+      - /services/nextcloud/DocumentServer/lib:/var/lib/onlyoffice
+      - /services/nextcloud/DocumentServer/db:/var/lib/postgresql
     restart: unless-stopped
-    environment:
-      - USE_UNAUTHORIZED_STORAGE=false
 
 networks:
   nextcloud_network:
@@ -84,4 +81,3 @@ networks:
     ipam:
       config:
         - subnet: 172.10.0.0/16
-          gateway: 172.10.0.1
