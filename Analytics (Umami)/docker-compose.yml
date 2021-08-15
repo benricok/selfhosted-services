@@ -1,0 +1,35 @@
+version: '3'
+services:
+  umami:
+    image: ghcr.io/mikecao/umami:postgresql-latest
+    container_name: Analytics-umami
+    ports:
+      - "3006:3000"
+    environment:
+      DATABASE_URL: postgresql://umami:umami@db:5432/umami # Change password
+      DATABASE_TYPE: postgresql
+      HASH_SALT: '' # Add random string
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "https://umami.<domain>"] # Add domain
+      interval: 30s
+      timeout: 10s
+      retries: 6
+      
+  umami-db:
+    image: postgres:12-alpine
+    container_name: Analytics-umami-db
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: umami # Change password
+    volumes:
+      - ./sql/schema.postgresql.sql:/docker-entrypoint-initdb.d/schema.postgresql.sql:ro
+      - /services/umami/db/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
