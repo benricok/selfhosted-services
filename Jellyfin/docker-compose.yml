@@ -13,8 +13,8 @@ services:
       retries: 6
     volumes:
       - /services/Jellyfin/config:/config
-      - jellyfin-cache:/cache
-      - /mnt/zfspool/nextcloud/jellyfin/files/Media:/media
+      - jellyfin-cache:/cache # Change cache to directory if necessary
+      - /mnt/zfspool/nextcloud/jellyfin/files/Media:/media # Change media directory
       
 volumes:
   jellyfin-cache:
