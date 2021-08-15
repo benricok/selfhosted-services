@@ -2,35 +2,37 @@ version: '3'
 services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
-    container_name: nginxproxy
+    container_name: NginxProxyManager
     restart: unless-stopped
     depends_on:
-      - db
-    ports:
+      proxy-db:
+        condition: service_healthy
+    ports: # Don't change
       - '80:80'
       - '81:81'
       - '443:443'
     volumes:
-      - ./config.json:/app/config/production.json
-      - /services/nginxProxyManager/data:/data
-      - /services/nginxProxyManager/letsencrypt:/etc/letsencrypt
+      - /services/NginxProxyManager/app/config.json:/app/config/production.json
+      - /services/NginxProxyManager/app/data:/data
+      - /services/NginxProxyManager/app/letsencrypt:/etc/letsencrypt
     healthcheck:
       test: ["CMD", "curl", "-fk", "http://127.0.0.1:81"]
       interval: 30s
       timeout: 10s
       retries: 6
 
-  db:
+  proxy-db:
     image: 'jc21/mariadb-aria:10.4'
-    container_name: nginxproxy-DB
+    container_name: NginxProxyManager-DB
     restart: unless-stopped
     environment:
+      TZ: Africa/Johannesburg
       MYSQL_ROOT_PASSWORD: '' # Add root password
       MYSQL_DATABASE: 'npm'
       MYSQL_USER: 'nginx'
       MYSQL_PASSWORD: '' # Add user password
     volumes:
-      - /services/nginxProxyManager/data/mysql:/var/lib/mysql
+      - /services/nginxProxyManager/db/data:/var/lib/mysql
     healthcheck:
       test:  mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD || exit 1
       interval: 30s
