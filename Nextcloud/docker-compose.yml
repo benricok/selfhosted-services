@@ -46,6 +46,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - VIRTUAL_HOST= # Add domain
+      - OVERWRITEPROTOCOL=https
     restart: unless-stopped      
     healthcheck:
       test: ["CMD", "curl", "-fk", "https://nc.<domain>"] # Add domain
